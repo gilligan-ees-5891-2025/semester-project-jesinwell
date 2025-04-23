@@ -1,8 +1,8 @@
 ---
-title: "Put the title of your project here"
+title: "Climate Change and Sedimentation: Exploring the Impact of Temperature on Sedimentation"
 subtitle: "EES 4891/5891: Probability and Statistics for Geosciences"
-author: "Put your name here"
-date: last-modified
+author: "Josephine Sinwell"
+date: 04/22/2025
 ---
 
 ## Setup
@@ -17,58 +17,240 @@ Set up R environment by loading the necessary libraries
 library(knitr)
 library(scales)
 library(tidyverse)
+library(tidymodels)
 
-# maybe include other libraries:
-# library(tidymodels)
+install.packages("devtools")
+devtools::install_local("C:/Users/Josie/OneDrive/Desktop/EES/EES Stats/lipdR-main")
 
-# set up default plotting format for ggplot2 graphs
+library(lipdR)
+
 theme_set(theme_bw())
 ```
 
 ## Introduction
 
-Write the introduction: describe what data you're going to study, why you're interested in it, where you obtained the data, and any other relevant background.
+For this project, I will be analyzing a dataset I found on NOAA titled “Adelaid Tarn, New Zealand Air Temperature Reconstruction over the Last 16,000 Years.” This study obtained pollen and plant microfossils from a small lake in South Island, New Zealand, and used it to create a 16,000-year vegetation and climate reconstruction. I am interested in this dataset because I am planning to study abroad in New Zealand, and I find it fascinating how pollen and plant fossils can tell us about past climates and environmental changes, which can then inform us about our current and future environments.
 
-### Date set
+### Data set
 
-Describe your data set: what data are you looking at? Where did you get it from (cite publications if relevant), etc. Describe what the data is: what variables are measured, how many observations (rows in a data table) does it contain, etc.
+The dataset used in this study is titled “Adelaide Tarn, New Zealand Air Temperature Reconstruction over the Last 16,000 Years,” and was obtained from the NOAA National Centers for Environmental Information. It was originally compiled by Jara et al. (2015) as part of a study reconstructing climate and vegetation dynamics in the South Island of New Zealand. This dataset includes variables such as age (calendar year before present), temperature (surface air temperature), and depth. The dataset covers periods of climatic change, finding that warming periods 13,000-10,000 years ago and 7,000 to 6,000 years ago led to forest expansion, while cooling periods 10,000-7,000 years ago and the last 3,000 years led to reduced forests. It also found that climate patterns matched Antarctic and Southern Ocean trends from 15,000 years ago until about 6,000 years ago, and the switch is attributed to El Nino events causing regional cooling and forest decline. There are 87 rows of data available.
 
-You may want to incude code to read the data in.
+Citation: Jara, Ignacio A.; Newnham, Rewi M.; Vanderfoes, Marcus J.; Foster, Courtney R.; Lowe, David J.; Wilmshurst, Janet M.; Moreno, Patricio I.; Renwick, James A.; Homes, Aline M. 2015. Pollen-climate reconstruction from northern South Island, New Zealand (41°S), reveals varying high- and low-latitude teleconnections over the last 16 000 years. Journal of Quaternary Science, 30(8), 817-829. doi: 10.1002/jqs.2818
+
+I loaded the dataset using the lipdR package, which allows for reading and interacting with Linked Paleo Data files. The dataset was downloaded from NOAA and read into R as a structured list.
+
+```{r}
+ds <- readLipd("C:/Users/Josie/OneDrive/Desktop/EES/EES Stats/AdelaideTarn.Jara.2015 (2).lpd")
+```
+
+To prepare the dataset for analysis, I extracted the measurement tables containing the core variables from the LiPD structure.
+
+```{r}
+paleo_data <- ds$paleoData[[1]]$measurementTable[[1]]
+chron_data <- ds$chronData[[1]]$measurementTable[[1]]
+
+temperature <- paleo_data$temperature$values
+depth <- paleo_data$depth$values
+age_depth <- unlist(chron_data$depth$values)
+age_values <- unlist(chron_data$age$values)
+
+interp_age <- approx(x = age_depth, y = age_values, xout = depth)$y
+```
+
+```{r}
+
+df <- data.frame(
+  temperature = temperature,
+  depth = depth,
+  age = interp_age
+)
+
+head(df)
+
+```
 
 ## Descriptive Statistics
 
-Put code and text to calculate and present descriptive statistics for your data. This should include histograms and kernel-density plots of the distribution of each variable you will be studying. If you have multivariate data, a pairs plot is helpful for showing the correlations and covariance between different variables.
+To understand the basic characteristcs of the dataset, I calculated summary statistics and standard deviations for the three key variables: temperature, depth, and age.
 
-Describe the probability distribution of the data: is it normal or some other distribution? Histograms and Q-Q plots can be helpful here.
+```{r}
+summary(df$temperature)
+summary(df$depth)
+summary(df$age)
+
+sd(df$temperature)
+sd(df$depth)
+sd(df$age, na.rm = TRUE)
+```
+
+This shows that temperature has a fairly symmetric distribution around 0, but the slightly lower median could mean a leftwards skew. Depth also looks fairly symmetric. Age has a wide spread, and is missing 20 values, but the mean and median are equal. It has a large standard deviation but that is understandable since the data ranges across thousands of years.
+
+Next, I made some histograms and kernel density plots to begin to visualize the data.
+
+```{r}
+ggplot(df, aes(x = temperature)) +
+  geom_histogram(aes(y = after_stat(density)), bins = 15, fill = "lightblue", color = "white") +
+  geom_density(color = "darkblue", linewidth = 0.5) +
+  labs(title = "Temperature Distribution", x = "Temperature (°C)", y = "Density")
+
+ggplot(df, aes(x = depth)) +
+  geom_histogram(aes(y = after_stat(density)), bins = 25, fill = "pink", color = "white") +
+  geom_density(color = "darkblue", linewidth = 0.5) +
+  labs(title = "Depth Distribution", x = "Depth (cm)", y = "Density")
+
+ggplot(df |> filter(!is.na(age)), aes(x = age)) +
+  geom_histogram(aes(y = after_stat(density)), bins = 10, fill = "purple", color = "white") +
+  geom_density(color = "darkblue", linewidth = 0.5) +
+  labs(title = "Age Distribution", x = "Age (years Before Present)", y = "Density")
+```
+
+For the temperature histogram, it is right skewed, most values are towards the lower end with fewer values by the tail. This suggests that colder temperatures were seen more frequently, with a few higher temperature anomalies.
+
+For the depth histogram, the shape is fairly uniform. This suggests that the sediment core was sampled relatively evenly throughout the depth, which is ideal for calculating sedimentation rates and making comparisons.
+
+For the age histogram, the shape has several peaks and dips. Thus, the age values are not evenly distributed– there must be intervals of slow sediment accumulation and high accumulation. These could indicate shifts in depositional environments.
+
+Next, I made a Q-Q plot to visualize normality for each variable.
+
+```{r}
+ggplot(df, aes(sample = temperature)) +
+  geom_qq() + geom_qq_line(color = "red") +
+  labs(title = "Q-Q Plot: Temperature")
+
+# Depth
+ggplot(df, aes(sample = depth)) +
+  geom_qq() + geom_qq_line(color = "red") +
+  labs(title = "Q-Q Plot: Depth")
+
+# Age (filter out NAs)
+ggplot(df |> filter(!is.na(age)), aes(sample = age)) +
+  geom_qq() + geom_qq_line(color = "red") +
+  labs(title = "Q-Q Plot: Age")
+```
+
+For the temperature Q-Q plot, the data is roughly normally distributed, the points generally align with the line. However there is some deviation at the upper and lower ends.
+
+For the depth Q-Q plot, the data here does not show a normal distributed, with a significant departure from the red line, especially at the tails. The data is likely skewed or has outliers.
+
+For the age Q-Q plot, it shows a similar pattern as the depth plot. Large deviations shown, especially at the higher end.
 
 ## Research Questions
 
-This is a place to describe the research questions you want to ask about your data.
+This study aims to explore how climate variation influenced sediment deposition over time at Adelaide Tarn. Specifically, I want to investigate the relationship between temperature (used as an indicator for climate change) and sedimentation rate, which is derived from changes in depth and age.
 
-It's helpful to use tables and/or graphs to illustrate what you're thinking about and what questions you want to ask.
+My main research question is: How were sedimentation rates affected by climate change during the period recorded in the sediment core?
+
+Sub-questions I will look at include:
+
+-   Does temperature correlate significantly with sedimentation rate?
+
+-   Does sedimentation rate show significant variability with temperature?
 
 ## Hypotheses and Tests
 
-State hypotheses about your data and describe how you will use tests to test the hypotheses
-
-Put code to implement the analysis and hypothesis tests, and include interpretations of thee
-
 ### Hypotheses
 
-State your hypothesis or hypotheses
+Main Hypothesis: periods of climatic extremes are associated with increased sedimentation rates, suggesting that significant climate cooling and warming may have influenced depositional processes such as erosion or runoff.
+
+Null Hypothesis: there is no significant relationship between sedimentation rate and temperature.
 
 ### Methods
 
-Describe the methods you'll use to analyze your data in preparation for testing hypotheses. Include the analysis code.
+First I will calculate sedimentation rates using the age-depth relationship. I will also clean up the data by removing any non-available data.
+
+```{r}
+df <- df |> 
+  arrange(age) |>
+  mutate(sed_rate = c(NA, diff(depth) / diff(age))) |>
+  filter(!is.na(sed_rate), !is.na(temperature), !is.na(age))
+```
+
+Then I will check for linear or nonlinear relationships between sedimentation rate and temperature, using scatterplots and regression models.
+
+```{r}
+ggplot(df, aes(x = temperature, y = sed_rate)) +
+  geom_point() +
+  geom_smooth(method = "lm", color = "purple") +
+  labs(
+    title = "Relationship Between Temperature and Sedimentation Rate",
+    x = "Temperature (°C)",
+    y = "Sedimentation Rate (cm/year"
+  )
+```
+
+We see here that the trend line is relatively flat, which suggests that there may not be a strong relationship between temperature and sedimentation rate. There is also a large spread of data points, scattered especially in the higher temperature range. This indicates a large variability in the sedimentation rate.
+
+Then I will test whether sedimentation rate is normally distributed by creating a Q-Q plot and then conducting a Shapiro-Wilk test for normality.
+
+```{r}
+ggplot(df, aes(sample = sed_rate)) +
+  geom_qq() +
+  geom_qq_line()
+
+shapiro.test(df$sed_rate)
+```
+
+In the Q-Q plot, there is a significant departure of the datapoints from the line, particularly at the tails. The sedimentation rate does not seem normally distributed.
+
+The Shapiro-Wilk test confirms that the sedimentation rate is not normally distributed. The p value is incredibly small, which confirms the null hypothesis.
+
+At this point, I decided to try to fit my model to a gamma distribution.
+
+```{r}
+library(MASS, quietly = TRUE)
+g_params <- fitdistr(df$sed_rate, densfun = "gamma")
+print(g_params$estimate)
+```
+
+Now, I made a Q-Q plot to check how well the data is described by a gamma distribution.
+
+```{r}
+ggplot(df, aes(sample = sed_rate)) + 
+  geom_qq_line(distribution = qgamma, dparams = g_params$estimate) +
+  geom_qq(distribution = qgamma, dparams = g_params$estimate) +
+  labs(title = "Q-Q Plot for Sedimentation Rate (Gamma Distribution)",
+       x = "Theoretical Quantiles", y = "Sample Quantiles")
+```
+
+This fits a little bit better, especially in the lower range, so we will go with it. There is still deviation in the higher sedimentation ranges however.
 
 ### Hypothesis Tests
 
-Details about the hypothesis tests, including code
+Next I will apply linear regression to test the relationship between temperature and sedimentation rate. To do this I will fit a generalized linear model with Gamma Distribution.
+
+I had to do a bit of research on how to do regression analysis with a gamma distribution, which is where I learned that you need to use a generalized linear model and an appropriate link function. Further research led me to select a log link function as the appropriate link function, as it is commonly used when the dependent variable is positive and continuous, like my sedimentation rate.
+
+```{r}
+recipe <- recipe(sed_rate ~ temperature, data = df)
+model <- linear_reg() |> 
+  set_engine("glm", family = Gamma(link = "log"))
+
+wflow <- workflow() |> 
+  add_recipe(recipe) |> 
+  add_model(model)
+
+fit <- fit(wflow, data = df)
+fit |> extract_fit_engine() |> summary()
+```
+
+For the intercept, which represents the expected value of the sedimentation rate when temperature is 0, the estimate was -3,004488. Since this is a log link function, the intercept represents the log-transformed expected sedimentation rate. The intercept is highly statistically significant, as show by the very small p-value.
+
+For the temperature, the coefficient indicates that for each 1°C increase in temperature, the sedimentation rate decreases by approximately 0.78. This p-value of 0.391, however, is too big to be statistically significant, thus there is no strong evidence to support that temperature signifcantly affects sedimentation rate in this model.
+
+For the model fit, the null deviance is 18.607 and the residual deviance is 18.341. Since the deviance after adding the temperature predictor is only slightly smaller, it suggests that the model with temperature does not really add anything.
 
 ### Results and Discussion
 
-Results from your hypothesis tests and discussion, interpreting your results
+To recap, my main hypothesis was that periods of climatic extremes are associated with increased sedimentation rates, suggesting that significant climate cooling and warming may have influenced depositional processes such as erosion or runoff. My null hypothesis was that there is no significant relationship between sedimentation rate and temperature.
+
+To test this, I used a Gamma GLM with a log link function, focusing on temperature as the main predictor. This resulted in a p-value of 0.391, which is not statistically significant. This indicates that temperature does not significantly influence sedimentation rates in the dataset, meaning that my initial hypothesis was not supported by the data.
+
+This lack of significance indicates that temperature alone may not explain the variability in sedimentation rates in this dataset. This could be due to other factors such as precipitation, vegetation, or human activity possibly having a more substantial influence on sedimentation rates.
 
 ## Conclusions
 
-What did you learn? What results would a reader be interested in? What would be the next steps if you were to continue studying this data after the end of the semester?
+I learned that temperature does not always provide a direct means of understanding sedimentation rates. More importantly, I gained a lot of hands-on experience with implementing statistical regression on environmental data, which has significantly contributed to my learning process in this class. Even though temperature was an expected predictor, it did not show the significant effect that I had anticipated, showing first-hand how complex environmental processes can be.
+
+A reader would likely be interested in the fact that temperature did not have a significant impact on sedimentation rates, which, as I experienced, may challenge previous assumptions about the impact climate has on sedimentation. This also highlights the importance of considering multiple variables when analyzing environmental data.
+
+For future studies, it might be best to consider some of these other variables, such as precipitation, vegetation, and human activity. Non-linear regression might also be helpful, but I do not know enough about it. It might also be interesting to look at extended time periods, or even just a different time period. This could add more samples to the dataset and potentially offer a more accurate analysis. An expansion of the timeframe could also lead to more generalized studies on large-scale climate trends.
