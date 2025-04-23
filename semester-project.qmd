@@ -14,14 +14,16 @@ Set up R environment by loading the necessary libraries
 #| warning: false
 #| echo: true
 #| results: "hide"
-library(knitr)
-library(scales)
-library(tidyverse)
-library(tidymodels)
+
+options(repos = c(CRAN = "https://cloud.r-project.org/"))
 
 install.packages("devtools")
 devtools::install_local("C:/Users/Josie/OneDrive/Desktop/EES/EES Stats/lipdR-main")
 
+library(knitr)
+library(scales)
+library(tidyverse)
+library(tidymodels)
 library(lipdR)
 
 theme_set(theme_bw())
