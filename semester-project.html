@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.6.40">
+<meta name="generator" content="quarto-1.5.57">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -65,12 +65,42 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="semester-project_files/libs/quarto-html/tippy.umd.min.js"></script>
 <script src="semester-project_files/libs/quarto-html/anchor.min.js"></script>
 <link href="semester-project_files/libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="semester-project_files/libs/quarto-html/quarto-syntax-highlighting-549806ee2085284f45b00abea8c6df48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="semester-project_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="semester-project_files/libs/bootstrap/bootstrap.min.js"></script>
 <link href="semester-project_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="semester-project_files/libs/bootstrap/bootstrap-8a79a254b8e706d3c925cde0a310d4f0.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="semester-project_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="css/grading.css">
 </head>
 
 <body class="fullcontent">
@@ -111,38 +141,63 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
+<div class="comment">
+<p>You can find my comments on your project in colored boxes like this.</p>
+</div>
 <section id="setup" class="level2">
 <h2 class="anchored" data-anchor-id="setup">Setup</h2>
 <p>Set up R environment by loading the necessary libraries</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(<span class="at">repos =</span> <span class="fu">c</span>(<span class="at">CRAN =</span> <span class="st">"https://cloud.r-project.org/"</span>))</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"devtools"</span>)</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>devtools<span class="sc">::</span><span class="fu">install_local</span>(<span class="st">"C:/Users/Josie/OneDrive/Desktop/EES/EES Stats/lipdR-main"</span>)</span>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># options(repos = c(CRAN = "https://cloud.r-project.org/"))</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co">#</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co"># install.packages("devtools")</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co"># devtools::install_local("C:/Users/Josie/OneDrive/Desktop/EES/EES Stats/lipdR-main")</span></span>
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(knitr)</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(scales)</span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidymodels)</span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lipdR)</span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="fu">theme_set</span>(<span class="fu">theme_bw</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="co"># This is a good way to ensure that the package is installed, without</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="co"># the time-consumping step of installing the package every time you </span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="co"># render your document.</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="sc">!</span> <span class="fu">require</span>(lipdR)) {</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>  remotes<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">"nickmckay/lipdR"</span>)</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">library</span>(lipdR)</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(knitr)</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(scales)</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidymodels)</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lipdR)</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a><span class="fu">theme_set</span>(<span class="fu">theme_bw</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="introduction" class="level2">
 <h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
 <p>For this project, I will be analyzing a dataset I found on NOAA titled “Adelaid Tarn, New Zealand Air Temperature Reconstruction over the Last 16,000 Years.” This study obtained pollen and plant microfossils from a small lake in South Island, New Zealand, and used it to create a 16,000-year vegetation and climate reconstruction. I am interested in this dataset because I am planning to study abroad in New Zealand, and I find it fascinating how pollen and plant fossils can tell us about past climates and environmental changes, which can then inform us about our current and future environments.</p>
+<div class="comment">
+<p>Good introduction, explaining what the data set is, where you found it, and why it’s interesting to you. The context of how this data set relates to your research interests, and what you hope to learn from it, is nice.</p>
+</div>
 <section id="data-set" class="level3">
 <h3 class="anchored" data-anchor-id="data-set">Data set</h3>
 <p>The dataset used in this study is titled “Adelaide Tarn, New Zealand Air Temperature Reconstruction over the Last 16,000 Years,” and was obtained from the NOAA National Centers for Environmental Information. It was originally compiled by Jara et al.&nbsp;(2015) as part of a study reconstructing climate and vegetation dynamics in the South Island of New Zealand. This dataset includes variables such as age (calendar year before present), temperature (surface air temperature), and depth. The dataset covers periods of climatic change, finding that warming periods 13,000-10,000 years ago and 7,000 to 6,000 years ago led to forest expansion, while cooling periods 10,000-7,000 years ago and the last 3,000 years led to reduced forests. It also found that climate patterns matched Antarctic and Southern Ocean trends from 15,000 years ago until about 6,000 years ago, and the switch is attributed to El Nino events causing regional cooling and forest decline. There are 87 rows of data available.</p>
 <p>Citation: Jara, Ignacio A.; Newnham, Rewi M.; Vanderfoes, Marcus J.; Foster, Courtney R.; Lowe, David J.; Wilmshurst, Janet M.; Moreno, Patricio I.; Renwick, James A.; Homes, Aline M. 2015. Pollen-climate reconstruction from northern South Island, New Zealand (41°S), reveals varying high- and low-latitude teleconnections over the last 16 000 years. Journal of Quaternary Science, 30(8), 817-829. doi: 10.1002/jqs.2818</p>
+<div class="comment">
+<p>Good description of what the data is and where it comes from. You’re very thorough, giving the variables in the data set, who gathered it, where the methods were published.</p>
+<p>You also give very good context for what kinds of climatic events the data can be used to study.</p>
+<p>The one additional thing that could have been useful would be to give the URL for the NOAA data set, since it’s not obvious from reading the paper by Jara <em>et al.</em> to figure out where a reader could download the data.</p>
+</div>
 <p>I loaded the dataset using the lipdR package, which allows for reading and interacting with Linked Paleo Data files. The dataset was downloaded from NOAA and read into R as a structured list.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>ds <span class="ot">&lt;-</span> <span class="fu">readLipd</span>(<span class="st">"C:/Users/Josie/OneDrive/Desktop/EES/EES Stats/AdelaideTarn.Jara.2015 (2).lpd"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ds &lt;- readLipd("C:/Users/Josie/OneDrive/Desktop/EES/EES Stats/AdelaideTarn.Jara.2015 (2).lpd")</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>ds <span class="ot">&lt;-</span> <span class="fu">readLipd</span>(<span class="st">"data/AdelaideTarn.Jara.2015.lpd"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] "Loading 1 datasets from C:/Users/Josie/OneDrive/Desktop/EES/EES Stats/AdelaideTarn.Jara.2015 (2).lpd..."
-[1] "reading: AdelaideTarn.Jara.2015 (2).lpd"</code></pre>
+<pre><code>[1] "Loading 1 datasets from D:/JG_Documents/teaching/Current Semester/EES_4891_5891/grading/semester-project/Sinwell-Josephine/data/AdelaideTarn.Jara.2015.lpd..."
+[1] "reading: AdelaideTarn.Jara.2015.lpd"</code></pre>
 </div>
+</div>
+<div class="comment problem">
+<p>It’s a good idea not to hard-code paths, because if you try to run the analysis on a different computer, the data may not be located in the same place on the new computer.</p>
+<p>Here, I put the data file in a subdirectory of your project, so it can be loaded wherever the project is.</p>
+<p>With very large data files, many megabytes, it can be a problem to store them in your GitHub repository, but this file is only 4.5 kilobytes, so there’s no problem adding it to the Git repository.</p>
 </div>
 <p>To prepare the dataset for analysis, I extracted the measurement tables containing the core variables from the LiPD structure.</p>
 <div class="cell">
@@ -173,6 +228,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 5  0.01823257    20 1112.542
 6 -0.05837313    25 1141.500</code></pre>
 </div>
+</div>
+<div class="comment">
+<p>Good job, wrangling the data into a tidy <code>data.frame</code>.</p>
 </div>
 </section>
 </section>
@@ -246,8 +304,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <p>For the temperature histogram, it is right skewed, most values are towards the lower end with fewer values by the tail. This suggests that colder temperatures were seen more frequently, with a few higher temperature anomalies.</p>
+<div class="comment">
+<p>Good.</p>
+<p>Something else that is interesting is that the distribution is bimodal (it has two peaks). It’s like there’s one part of the data set that’s distributed around 0.2 °C, and another part that’s distributed around a colder temperature, around <span class="math inline">\(-0.4\)</span> °C. So it’s like the temperature jumps from time to time between a warmer state and a colder state, with some random variation around each state.</p>
+</div>
 <p>For the depth histogram, the shape is fairly uniform. This suggests that the sediment core was sampled relatively evenly throughout the depth, which is ideal for calculating sedimentation rates and making comparisons.</p>
+<div class="comment">
+<p>Good. This is exactly right.</p>
+<p>You don’t expect depth to follow a probability distribution for a random variable, because samples are taken at reagular depths.</p>
+</div>
 <p>For the age histogram, the shape has several peaks and dips. Thus, the age values are not evenly distributed– there must be intervals of slow sediment accumulation and high accumulation. These could indicate shifts in depositional environments.</p>
+<div class="comment">
+<p>Good interpretation of the difference between age and depth.</p>
+</div>
 <p>Next, I made a Q-Q plot to visualize normality for each variable.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(df, <span class="fu">aes</span>(<span class="at">sample =</span> temperature)) <span class="sc">+</span></span>
@@ -284,8 +353,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <p>For the temperature Q-Q plot, the data is roughly normally distributed, the points generally align with the line. However there is some deviation at the upper and lower ends.</p>
+<div class="comment">
+<p>I’d say it’s not very normal. It deviates a good deal from the line near 0, so this shows that the median is greater than the mean, and there’s a significant skew that affects most of the data.</p>
+<p>The way the Q-Q plot looks curved near 0 on the x-axis (here, it looks like it’s curved downward, going from above the line to below the line), is an indication of a skewed distribution. Either an upward or a downward curve near the middle indicates skew. is a</p>
+</div>
 <p>For the depth Q-Q plot, the data here does not show a normal distributed, with a significant departure from the red line, especially at the tails. The data is likely skewed or has outliers.</p>
 <p>For the age Q-Q plot, it shows a similar pattern as the depth plot. Large deviations shown, especially at the higher end.</p>
+<div class="comment">
+<p>You know from your histograms and kernel-density plots that the depth and age are not normally distributed, so you don’t expect the Q-Q plots to look normal, and you correctly observe that they are clearly not normal.</p>
+</div>
 </section>
 <section id="research-questions" class="level2">
 <h2 class="anchored" data-anchor-id="research-questions">Research Questions</h2>
@@ -296,6 +372,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><p>Does temperature correlate significantly with sedimentation rate?</p></li>
 <li><p>Does sedimentation rate show significant variability with temperature?</p></li>
 </ul>
+<div class="comment">
+<p>These are good, interesting research questions.</p>
+</div>
 </section>
 <section id="hypotheses-and-tests" class="level2">
 <h2 class="anchored" data-anchor-id="hypotheses-and-tests">Hypotheses and Tests</h2>
@@ -303,6 +382,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h3 class="anchored" data-anchor-id="hypotheses">Hypotheses</h3>
 <p>Main Hypothesis: periods of climatic extremes are associated with increased sedimentation rates, suggesting that significant climate cooling and warming may have influenced depositional processes such as erosion or runoff.</p>
 <p>Null Hypothesis: there is no significant relationship between sedimentation rate and temperature.</p>
+<div class="comment">
+<p>Good hypothesses to use for answering your research questions.</p>
+</div>
 </section>
 <section id="methods" class="level3">
 <h3 class="anchored" data-anchor-id="methods">Methods</h3>
@@ -312,6 +394,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(age) <span class="sc">|&gt;</span></span>
 <span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">sed_rate =</span> <span class="fu">c</span>(<span class="cn">NA</span>, <span class="fu">diff</span>(depth) <span class="sc">/</span> <span class="fu">diff</span>(age))) <span class="sc">|&gt;</span></span>
 <span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(sed_rate), <span class="sc">!</span><span class="fu">is.na</span>(temperature), <span class="sc">!</span><span class="fu">is.na</span>(age))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="comment">
+<p>Good way to calculate the sedimentation rate</p>
 </div>
 <p>Then I will check for linear or nonlinear relationships between sedimentation rate and temperature, using scatterplots and regression models.</p>
 <div class="cell">
@@ -335,19 +420,48 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <p>We see here that the trend line is relatively flat, which suggests that there may not be a strong relationship between temperature and sedimentation rate. There is also a large spread of data points, scattered especially in the higher temperature range. This indicates a large variability in the sedimentation rate.</p>
+<div class="comment">
+<p>So something interesting here is that there are four extreme outliers from the rest of the data. If you inspect the data frame, you will finnd that thesse extreme values are the four shallowest samples, at depths 20, 25, 30, and 35.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r grade-src code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>df <span class="sc">|&gt;</span> <span class="fu">filter</span>(sed_rate <span class="sc">&gt;</span> <span class="fl">0.1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre class="grade-out"><code>  temperature depth      age  sed_rate
+1  0.01823257    20 1112.542 0.1726619
+2 -0.05837313    25 1141.500 0.1726619
+3  0.25935921    30 1170.458 0.1726619
+4  0.21335843    35 1199.417 0.1726619</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r grade-src code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(df, <span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre class="grade-out"><code>    temperature depth      age   sed_rate
+1   0.018232570    20 1112.542 0.17266187
+2  -0.058373127    25 1141.500 0.17266187
+3   0.259359207    30 1170.458 0.17266187
+4   0.213358426    35 1199.417 0.17266187
+5  -0.021090355    40 1287.500 0.05676443
+6   0.238206789    45 1415.000 0.03921569
+7   0.161783994    50 1542.500 0.03921569
+8   0.132945352    55 1670.000 0.03921569
+9  -0.001892648    60 1797.500 0.03921569
+10  0.074461476    65 1925.000 0.03921569</code></pre>
+</div>
+</div>
+<p>So some of what you may be seeing here is that over time, sediment compacts, especially as new layers are deposited and the weight of the upper layers compressses lower layers.</p>
+<p>You might want to leave the first four points out when you analyze the rest of your data.</p>
+</div>
 <p>Then I will test whether sedimentation rate is normally distributed by creating a Q-Q plot and then conducting a Shapiro-Wilk test for normality.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(df, <span class="fu">aes</span>(<span class="at">sample =</span> sed_rate)) <span class="sc">+</span></span>
-<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_qq</span>() <span class="sc">+</span></span>
-<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_qq_line</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(df, <span class="fu">aes</span>(<span class="at">sample =</span> sed_rate)) <span class="sc">+</span></span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_qq</span>() <span class="sc">+</span></span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_qq_line</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="semester-project_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="semester-project_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
-<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">shapiro.test</span>(df<span class="sc">$</span>sed_rate)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">shapiro.test</span>(df<span class="sc">$</span>sed_rate)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
     Shapiro-Wilk normality test
@@ -358,9 +472,40 @@ W = 0.6572, p-value = 5.02e-13</code></pre>
 </div>
 <p>In the Q-Q plot, there is a significant departure of the datapoints from the line, particularly at the tails. The sedimentation rate does not seem normally distributed.</p>
 <p>The Shapiro-Wilk test confirms that the sedimentation rate is not normally distributed. The p value is incredibly small, which confirms the null hypothesis.</p>
-<p>At this point, I decided to try to fit my model to a gamma distribution.</p>
+<div class="comment">
+<p>It can be interesting to repeat the normality tests after removing the outlier points</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(MASS, <span class="at">quietly =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r grade-src code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>df <span class="sc">|&gt;</span> <span class="fu">filter</span>(depth <span class="sc">&gt;</span> <span class="dv">35</span>) <span class="sc">|&gt;</span> <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">sample =</span> sed_rate)) <span class="sc">+</span> </span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_qq_line</span>() <span class="sc">+</span> <span class="fu">geom_qq</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="semester-project_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>And we can also look at the Shapiro-Wilk test</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r grade-src code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>df <span class="sc">|&gt;</span> <span class="fu">filter</span>(depth <span class="sc">&gt;</span> <span class="dv">35</span>) <span class="sc">|&gt;</span> <span class="fu">pull</span>(sed_rate) <span class="sc">|&gt;</span> <span class="fu">shapiro.test</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre class="grade-out"><code>
+    Shapiro-Wilk normality test
+
+data:  pull(filter(df, depth &gt; 35), sed_rate)
+W = 0.93464, p-value = 0.0003547</code></pre>
+</div>
+</div>
+<p>The data is still not normally distributed, but it’s a lot closer to a normal distribution than when we included the four shallowest observations.</p>
+</div>
+<p>At this point, I decided to try to fit my model to a gamma distribution.</p>
+<div class="comment problem">
+<p>A subtle misunderstanding here is for a regression analysis, what you want to test is not the probability distribution of the raw data, but the distribution of the residuals.</p>
+<p>You would fit the data to a linear relationship, <code>sed_rate ~ temperature</code>, and then analyze the distribution of the residuals.</p>
+<p>A linear regression can work very well if the raw data is not normally distributed, as long as the residuals are reasonably close to normally distributed.</p>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(MASS, <span class="at">quietly =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>
 Attaching package: 'MASS'</code></pre>
@@ -370,8 +515,8 @@ Attaching package: 'MASS'</code></pre>
 
     select</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>g_params <span class="ot">&lt;-</span> <span class="fu">fitdistr</span>(df<span class="sc">$</span>sed_rate, <span class="at">densfun =</span> <span class="st">"gamma"</span>)</span>
-<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(g_params<span class="sc">$</span>estimate)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>g_params <span class="ot">&lt;-</span> <span class="fu">fitdistr</span>(df<span class="sc">$</span>sed_rate, <span class="at">densfun =</span> <span class="st">"gamma"</span>)</span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(g_params<span class="sc">$</span>estimate)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>    shape      rate 
  4.329149 86.502141 </code></pre>
@@ -379,15 +524,15 @@ Attaching package: 'MASS'</code></pre>
 </div>
 <p>Now, I made a Q-Q plot to check how well the data is described by a gamma distribution.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(df, <span class="fu">aes</span>(<span class="at">sample =</span> sed_rate)) <span class="sc">+</span> </span>
-<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_qq_line</span>(<span class="at">distribution =</span> qgamma, <span class="at">dparams =</span> g_params<span class="sc">$</span>estimate) <span class="sc">+</span></span>
-<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_qq</span>(<span class="at">distribution =</span> qgamma, <span class="at">dparams =</span> g_params<span class="sc">$</span>estimate) <span class="sc">+</span></span>
-<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Q-Q Plot for Sedimentation Rate (Gamma Distribution)"</span>,</span>
-<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Theoretical Quantiles"</span>, <span class="at">y =</span> <span class="st">"Sample Quantiles"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(df, <span class="fu">aes</span>(<span class="at">sample =</span> sed_rate)) <span class="sc">+</span> </span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_qq_line</span>(<span class="at">distribution =</span> qgamma, <span class="at">dparams =</span> g_params<span class="sc">$</span>estimate) <span class="sc">+</span></span>
+<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_qq</span>(<span class="at">distribution =</span> qgamma, <span class="at">dparams =</span> g_params<span class="sc">$</span>estimate) <span class="sc">+</span></span>
+<span id="cb43-4"><a href="#cb43-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Q-Q Plot for Sedimentation Rate (Gamma Distribution)"</span>,</span>
+<span id="cb43-5"><a href="#cb43-5" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Theoretical Quantiles"</span>, <span class="at">y =</span> <span class="st">"Sample Quantiles"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="semester-project_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="semester-project_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -399,16 +544,16 @@ Attaching package: 'MASS'</code></pre>
 <p>Next I will apply linear regression to test the relationship between temperature and sedimentation rate. To do this I will fit a generalized linear model with Gamma Distribution.</p>
 <p>I had to do a bit of research on how to do regression analysis with a gamma distribution, which is where I learned that you need to use a generalized linear model and an appropriate link function. Further research led me to select a log link function as the appropriate link function, as it is commonly used when the dependent variable is positive and continuous, like my sedimentation rate.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>recipe <span class="ot">&lt;-</span> <span class="fu">recipe</span>(sed_rate <span class="sc">~</span> temperature, <span class="at">data =</span> df)</span>
-<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">linear_reg</span>() <span class="sc">|&gt;</span> </span>
-<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_engine</span>(<span class="st">"glm"</span>, <span class="at">family =</span> <span class="fu">Gamma</span>(<span class="at">link =</span> <span class="st">"log"</span>))</span>
-<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a>wflow <span class="ot">&lt;-</span> <span class="fu">workflow</span>() <span class="sc">|&gt;</span> </span>
-<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_recipe</span>(recipe) <span class="sc">|&gt;</span> </span>
-<span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_model</span>(model)</span>
-<span id="cb37-8"><a href="#cb37-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb37-9"><a href="#cb37-9" aria-hidden="true" tabindex="-1"></a>fit <span class="ot">&lt;-</span> <span class="fu">fit</span>(wflow, <span class="at">data =</span> df)</span>
-<span id="cb37-10"><a href="#cb37-10" aria-hidden="true" tabindex="-1"></a>fit <span class="sc">|&gt;</span> <span class="fu">extract_fit_engine</span>() <span class="sc">|&gt;</span> <span class="fu">summary</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>recipe <span class="ot">&lt;-</span> <span class="fu">recipe</span>(sed_rate <span class="sc">~</span> temperature, <span class="at">data =</span> df)</span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">linear_reg</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_engine</span>(<span class="st">"glm"</span>, <span class="at">family =</span> <span class="fu">Gamma</span>(<span class="at">link =</span> <span class="st">"log"</span>))</span>
+<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-5"><a href="#cb44-5" aria-hidden="true" tabindex="-1"></a>wflow <span class="ot">&lt;-</span> <span class="fu">workflow</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb44-6"><a href="#cb44-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_recipe</span>(recipe) <span class="sc">|&gt;</span> </span>
+<span id="cb44-7"><a href="#cb44-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_model</span>(model)</span>
+<span id="cb44-8"><a href="#cb44-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-9"><a href="#cb44-9" aria-hidden="true" tabindex="-1"></a>fit <span class="ot">&lt;-</span> <span class="fu">fit</span>(wflow, <span class="at">data =</span> df)</span>
+<span id="cb44-10"><a href="#cb44-10" aria-hidden="true" tabindex="-1"></a>fit <span class="sc">|&gt;</span> <span class="fu">extract_fit_engine</span>() <span class="sc">|&gt;</span> <span class="fu">summary</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 Call:
@@ -431,15 +576,81 @@ AIC: -416.1
 Number of Fisher Scoring iterations: 4</code></pre>
 </div>
 </div>
+<div class="comment problem">
+<p>It would be worth doing a regular <code>lm()</code> fit here, or a <code>glm()</code> model with a linear link instead of a log link.</p>
+<p>If you do this and filter out depths shallower than 40 cm, you find a statistically significant coefficient for temperature:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r grade-src code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a>model_2 <span class="ot">&lt;-</span> <span class="fu">linear_reg</span>() <span class="sc">|&gt;</span> <span class="fu">set_engine</span>(<span class="st">"glm"</span>)</span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a>wflow_2 <span class="ot">&lt;-</span> <span class="fu">workflow</span>() <span class="sc">|&gt;</span></span>
+<span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_recipe</span>(recipe) <span class="sc">|&gt;</span> </span>
+<span id="cb46-4"><a href="#cb46-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_model</span>(model_2)</span>
+<span id="cb46-5"><a href="#cb46-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-6"><a href="#cb46-6" aria-hidden="true" tabindex="-1"></a>fit_2 <span class="ot">&lt;-</span> <span class="fu">fit</span>(wflow_2, <span class="at">data =</span> <span class="fu">filter</span>(df, depth <span class="sc">&gt;</span> <span class="dv">35</span> ))</span>
+<span id="cb46-7"><a href="#cb46-7" aria-hidden="true" tabindex="-1"></a>fit_2 <span class="sc">|&gt;</span> <span class="fu">extract_fit_engine</span>() <span class="sc">|&gt;</span> <span class="fu">summary</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre class="grade-out"><code>
+Call:
+stats::glm(formula = ..y ~ ., family = stats::gaussian, data = data)
+
+Coefficients:
+             Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)  0.045711   0.001667  27.420   &lt;2e-16 ***
+temperature -0.018541   0.007148  -2.594   0.0112 *  
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+(Dispersion parameter for gaussian family taken to be 0.0002052811)
+
+    Null deviance: 0.018214  on 83  degrees of freedom
+Residual deviance: 0.016833  on 82  degrees of freedom
+AIC: -470.9
+
+Number of Fisher Scoring iterations: 2</code></pre>
+</div>
+</div>
+<p>You would also see a significant coefficient if you used your Gamma model with a log link omitting the four outlier points:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r grade-src code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a>fit_3 <span class="ot">&lt;-</span> <span class="fu">fit</span>(wflow, <span class="at">data =</span> df <span class="sc">|&gt;</span> <span class="fu">filter</span>(depth <span class="sc">&gt;</span> <span class="dv">35</span>))</span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a>fit_3 <span class="sc">|&gt;</span> <span class="fu">extract_fit_engine</span>() <span class="sc">|&gt;</span> <span class="fu">summary</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre class="grade-out"><code>
+Call:
+stats::glm(formula = ..y ~ ., family = ~Gamma(link = "log"), 
+    data = data)
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept) -3.09248    0.03742 -82.646   &lt;2e-16 ***
+temperature -0.37028    0.16044  -2.308   0.0235 *  
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+(Dispersion parameter for Gamma family taken to be 0.103421)
+
+    Null deviance: 10.1669  on 83  degrees of freedom
+Residual deviance:  9.5529  on 82  degrees of freedom
+AIC: -470.77
+
+Number of Fisher Scoring iterations: 4</code></pre>
+</div>
+</div>
+<p>This could have been a good place to try out workflow mapping to compare several models. You could check linear and log links, and compare <code>lm</code> and <code>glm</code>. Using <span class="math inline">\(k\)</span>-fold cross-validation would let you test model accuracy without having to make assumptions about whether the residuals are distributed normally, or on any other specific distribution, such as gamma.</p>
+</div>
 <p>For the intercept, which represents the expected value of the sedimentation rate when temperature is 0, the estimate was -3,004488. Since this is a log link function, the intercept represents the log-transformed expected sedimentation rate. The intercept is highly statistically significant, as show by the very small p-value.</p>
 <p>For the temperature, the coefficient indicates that for each 1°C increase in temperature, the sedimentation rate decreases by approximately 0.78. This p-value of 0.391, however, is too big to be statistically significant, thus there is no strong evidence to support that temperature signifcantly affects sedimentation rate in this model.</p>
 <p>For the model fit, the null deviance is 18.607 and the residual deviance is 18.341. Since the deviance after adding the temperature predictor is only slightly smaller, it suggests that the model with temperature does not really add anything.</p>
+<div class="comment">
+<p>Good interpretation of what the model summary says.</p>
+</div>
 </section>
 <section id="results-and-discussion" class="level3">
 <h3 class="anchored" data-anchor-id="results-and-discussion">Results and Discussion</h3>
 <p>To recap, my main hypothesis was that periods of climatic extremes are associated with increased sedimentation rates, suggesting that significant climate cooling and warming may have influenced depositional processes such as erosion or runoff. My null hypothesis was that there is no significant relationship between sedimentation rate and temperature.</p>
 <p>To test this, I used a Gamma GLM with a log link function, focusing on temperature as the main predictor. This resulted in a p-value of 0.391, which is not statistically significant. This indicates that temperature does not significantly influence sedimentation rates in the dataset, meaning that my initial hypothesis was not supported by the data.</p>
 <p>This lack of significance indicates that temperature alone may not explain the variability in sedimentation rates in this dataset. This could be due to other factors such as precipitation, vegetation, or human activity possibly having a more substantial influence on sedimentation rates.</p>
+<div class="comment">
+<p>The biggest thing that contributes to the lack of significance are the four outlier points in sedimentation rate, corresponding to the shallowest four depths.</p>
+</div>
 </section>
 </section>
 <section id="conclusions" class="level2">
@@ -447,6 +658,18 @@ Number of Fisher Scoring iterations: 4</code></pre>
 <p>I learned that temperature does not always provide a direct means of understanding sedimentation rates. More importantly, I gained a lot of hands-on experience with implementing statistical regression on environmental data, which has significantly contributed to my learning process in this class. Even though temperature was an expected predictor, it did not show the significant effect that I had anticipated, showing first-hand how complex environmental processes can be.</p>
 <p>A reader would likely be interested in the fact that temperature did not have a significant impact on sedimentation rates, which, as I experienced, may challenge previous assumptions about the impact climate has on sedimentation. This also highlights the importance of considering multiple variables when analyzing environmental data.</p>
 <p>For future studies, it might be best to consider some of these other variables, such as precipitation, vegetation, and human activity. Non-linear regression might also be helpful, but I do not know enough about it. It might also be interesting to look at extended time periods, or even just a different time period. This could add more samples to the dataset and potentially offer a more accurate analysis. An expansion of the timeframe could also lead to more generalized studies on large-scale climate trends.</p>
+<section id="summary" class="level3 comment">
+<h3 class="anchored" data-anchor-id="summary">Summary</h3>
+<p>This is a very good analysis. It is clear that you learned a lot.</p>
+<p>There were a few places where you could have done better:</p>
+<ol type="1">
+<li>Drop the first four observations, because the deposition rates are a lot larger than any of the rest of the data. I suspect this is because of compaction for the deeper (older) layers. The shallowest layerss may be too young to have had time to fully compact, and also the weight of the overburden contributes to compaction, and the shallowest layers don’t have as much mass overhead to press down on it.</li>
+<li>You misunderstood the use of normality testing for figuring out the best kind of regression. You could have used a simpler regression, such as <code>lm()</code> or <code>glm()</code> with a linear link, and you didn’t need to specify a gamma distribution.</li>
+</ol>
+<p>This would have allowed you to do a better hypothesis test, and you would have found a significant relationship between temperature and deposition rate.</p>
+<p>Apart from these issues, you did a very nice job with this analysis, and I thought the way you integrated the text describing what you were doing, the code to implement your analysis, and the output (graphs, and text output), to show the reader the results.</p>
+<p><strong>Grade:</strong> <span class="math inline">\(A-\)</span></p>
+</section>
 </section>
 
 </main>
@@ -533,6 +756,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   });
   clipboard.on('success', onCopySuccess);
   if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
     const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
       text: getTextToCopy,
       container: window.document.getElementById('quarto-embedded-source-code-modal')
@@ -643,6 +868,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       if (window.Quarto?.typesetMath) {
         window.Quarto.typesetMath(note);
       }
+      // TODO in 1.5, we should make sure this works without a callout special case
       if (note.classList.contains("callout")) {
         return note.outerHTML;
       } else {
